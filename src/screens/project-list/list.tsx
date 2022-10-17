@@ -1,6 +1,19 @@
 import {useEffect, useState} from "react";
 import react from 'react'
-export const List = ({list,users}) =>{
+import {User} from "./search-panel";
+interface Project{
+    id:string
+    name:string
+    personId:string
+    pin:boolean
+    organization:string
+}
+interface  listProps {
+    list:Project[]
+    users:User[]
+
+}
+export const List = ({list,users}:listProps) =>{
 
   return (
       <table>
