@@ -1,21 +1,10 @@
 import React, {FormEvent, useEffect} from 'react';
-// 导入 服务器地址
-const apiUrl = process.env.REACT_APP_API_URL
+import {useAuth} from "../context/auth-context";
 
+// 登录页面
 const LoginScreen = () => {
-    const login = (param: { username: string, password: string }) => {
-        fetch(`${apiUrl}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(param)
-        }).then(async (response) => {
-            if (response.ok) {
-
-            }
-        })
-    }
+    // 调用自定义hook  获取全局状态
+    const {login, user} = useAuth()
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         // 阻止默认行为
@@ -27,6 +16,9 @@ const LoginScreen = () => {
     }
     return (
         <form onSubmit={handleSubmit}>
+            {
+                user ? <div>登录成功{user.token}</div> : null
+            }
             <div>
                 <label htmlFor="username">username</label>
                 <input type="text " id={'username'}/>
