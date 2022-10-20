@@ -7,11 +7,11 @@ export interface IAuthParam {
     password: string;
 }
 
-const localStoreageKey = "__auth-provider-token__";
+ const localStoreageKey = "__auth-provider-token__";
 
-const getToken = localStorage.getItem(localStoreageKey);
+export const getToken = () => localStorage.getItem(localStoreageKey);
 
-const handleUserResponse = ({user}: { user: User }) => {
+ export const handleUserResponse = ({user}: { user: User }) => {
     localStorage.setItem(localStoreageKey, user.token);
     return user;
 };
