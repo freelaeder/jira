@@ -2,12 +2,12 @@ import {SearchPanel} from "./search-panel"
 import {List} from "./list"
 import {useEffect, useState} from "react";
 import {cleanObject, useDebounce, useMount} from "../../utils";
-import qs from 'qs'
+// import qs from 'qs'
 import {useHttp} from "../../utils/http";
 
 // console.log(qs.stringify('sd'))
 // 导入 服务器地址
-const apiUrl = process.env.REACT_APP_API_URL
+// const apiUrl = process.env.REACT_APP_API_URL
 export const ProjectListScreen = () => {
     // 保存 用户名 项目名
     const [param, setParam] = useState({
@@ -26,6 +26,9 @@ export const ProjectListScreen = () => {
 
     // 发送请求 获取projects
     useEffect(() => {
+        // client('projects',{data:cleanObject(debouncedParam)}).then((data) => setList(data))
+        // 两个代码效果一致
+        //
         client('projects',{data:cleanObject(debouncedParam)}).then(setList)
         // qs stringify 会自动转化 拼接  projects?personId=1
         // cleanObject 会清空 value 为空的 key

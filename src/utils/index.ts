@@ -50,7 +50,7 @@ export const useMount = (callback: () => void) => {
 //         },delay)
 //     }
 // }
-export const useDebounce = <V>(value: V, delay?: number ) => {
+export const useDebounce = <V>(value: V, delay = 500 ) => {
     const [debounceValue, setDebounce] = useState(value)
     useEffect(() => {
         // 每次在value变化后 设置一个定时器
