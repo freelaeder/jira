@@ -2,13 +2,9 @@ import {SearchPanel} from "./search-panel"
 import {List} from "./list"
 import {useEffect, useState} from "react";
 import {cleanObject, useDebounce, useMount} from "../../utils";
-// import qs from 'qs'
 import {useHttp} from "../../utils/http";
-import {Card} from "antd";
+import styled from "@emotion/styled";
 
-// console.log(qs.stringify('sd'))
-// 导入 服务器地址
-// const apiUrl = process.env.REACT_APP_API_URL
 export const ProjectListScreen = () => {
     // 保存 用户名 项目名
     const [param, setParam] = useState({
@@ -21,7 +17,7 @@ export const ProjectListScreen = () => {
     // 定义一个list 保存项目信息
     const [list, setList] = useState([])
     // 使用usedebounce
-    const debouncedParam =useDebounce(param,500)
+    const debouncedParam = useDebounce(param, 500)
     // 使用 useHttp
     const client = useHttp()
 
@@ -30,7 +26,7 @@ export const ProjectListScreen = () => {
         // client('projects',{data:cleanObject(debouncedParam)}).then((data) => setList(data))
         // 两个代码效果一致
         //
-        client('projects',{data:cleanObject(debouncedParam)}).then(setList)
+        client('projects', {data: cleanObject(debouncedParam)}).then(setList)
         // qs stringify 会自动转化 拼接  projects?personId=1
         // cleanObject 会清空 value 为空的 key
         // fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`).then(async response => {
@@ -49,13 +45,18 @@ export const ProjectListScreen = () => {
     //         }
     //     })
     // }, [])     // deps []  只运行一次的 effect（仅在组件挂载和卸载时执行）
-    useMount(() =>{
+    useMount(() => {
         client('users').then(setUsers)
     })
     return (
-        <div>
-                <SearchPanel users={users} param={param} setParam={setParam}/>
-                <List users={users} list={list}/>
-        </div>
+        <Container>
+            <h1>项目列表</h1>
+            <SearchPanel users={users} param={param} setParam={setParam}/>
+            <List users={users} list={list}/>
+        </Container>
     )
 }
+
+const Container = styled.div`
+  padding: 3.2rem;
+`

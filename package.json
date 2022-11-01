@@ -16,6 +16,7 @@
     "antd": "^4.23.6",
     "concurrently": "^7.4.0",
     "craco-less": "^2.0.0",
+    "dayjs": "^1.11.6",
     "eslint-config-prettier": "^8.5.0",
     "fetch-mock": "^9.11.0",
     "jira-dev-tool": "^1.7.61",
