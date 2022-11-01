@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {cleanObject, useDebounce, useMount} from "../../utils";
 // import qs from 'qs'
 import {useHttp} from "../../utils/http";
+import {Card} from "antd";
 
 // console.log(qs.stringify('sd'))
 // 导入 服务器地址
@@ -50,16 +51,11 @@ export const ProjectListScreen = () => {
     // }, [])     // deps []  只运行一次的 effect（仅在组件挂载和卸载时执行）
     useMount(() =>{
         client('users').then(setUsers)
-        // fetch(`${apiUrl}/users`).then(async response => {
-        //             if (response.ok) {
-        //                 setUsers(await response.json())
-        //             }
-        //         })
     })
     return (
         <div>
-            <SearchPanel users={users} param={param} setParam={setParam}/>
-            <List users={users} list={list}/>
+                <SearchPanel users={users} param={param} setParam={setParam}/>
+                <List users={users} list={list}/>
         </div>
     )
 }

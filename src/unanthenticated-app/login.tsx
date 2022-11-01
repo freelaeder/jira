@@ -1,34 +1,29 @@
 import React, {FormEvent, useEffect} from 'react';
 import {useAuth} from "../context/auth-context";
+import {Button, Form} from "antd";
+import {LoginButon} from "./index";
 
 // 登录页面
 const LoginScreen = () => {
     // 调用自定义hook  获取全局状态
     const {login, user} = useAuth()
-
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        // 阻止默认行为
-        event.preventDefault()
-        const username = (event.currentTarget.elements[0] as HTMLInputElement).value
-        const password = (event.currentTarget.elements[1] as HTMLInputElement).value
-        console.log(username, password)
-        login({username, password})
+    // 表单验证通过触发的提交事件
+    const handleSubmit = (values:{username:string,password:string}) => {
+        console.log(values)
+        login(values)
     }
     return (
-        <form onSubmit={handleSubmit}>
-            {
-                user ? <div>登录成功{user.token}</div> : null
-            }
-            <div>
-                <label htmlFor="username">username</label>
-                <input type="text " id={'username'}/>
-            </div>
-            <div>
-                <label htmlFor="password">password</label>
-                <input type="text " id={'password'}/>
-            </div>
-            <button type={"submit"}>login</button>
-        </form>
+        <Form onFinish={handleSubmit}>
+            <Form.Item name={'username'} rules={[{required:true,message:'请输入用户名'}]}>
+                <input placeholder={'请输入用户名'} type="text " id={'username'}/>
+            </Form.Item>
+            <Form.Item name={'password'} rules={[{required:true,message:'请输入密码'}]}>
+                <input placeholder={'请输入密码'} type="text " id={'password'}/>
+            </Form.Item>
+            <Form.Item>
+                <LoginButon htmlType={'submit'} type={'primary'} >login</LoginButon>
+            </Form.Item>
+        </Form>
     );
 };
 
