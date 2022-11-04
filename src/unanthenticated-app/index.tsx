@@ -19,7 +19,7 @@ export const UnanthenticatedApp = () => {
     // 登录失败显示的错误信息
     const [error, setError] = useState<Error | null>(null)
     // 改变当前页面title
-    // useDocumentTitle('请登录注册以继续')
+    useDocumentTitle('请登录注册以继续')
     return (
 
         <Container>

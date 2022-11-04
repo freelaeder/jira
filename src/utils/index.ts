@@ -1,7 +1,7 @@
 // 在一个函数中 改变传入的对象 本身是不好的
 // 排除value 为 0 的情况
 // !! 把一个值 转化为 boolean值
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 export const isFasy = (value: unknown) => value === 0 ? false : !value
 // cleanObject 会清空 value 为空的 key 返回新的 对象
@@ -81,8 +81,11 @@ export const useDebounce = <V>(value: V, delay = 500) => {
 // 改变当前页面的title
 // keeponUnmount true 保留title
 export const useDocumentTitle = (title: string, keeponUnmount = true) => {
+    // 页面加载后 oldTitle === 旧 'react app'
+    // 加载后 oldTitle ===  新 用户传递的title、
     // 记录页面刚加载的title
-    const oldTitle = document.title
+    // 返回的 ref 对象在组件的整个生命周期内持续存在。
+    const oldTitle = useRef(document.title).current
     useEffect(() => {
         document.title = title
     }, [title])
@@ -91,8 +94,10 @@ export const useDocumentTitle = (title: string, keeponUnmount = true) => {
         //页面卸载时调用
         return () => {
             if (!keeponUnmount) {
+                // 如果不添加依赖 oldTitle 永远是第一次加载时的title
                 document.title = oldTitle
             }
         }
-    }, [])
+
+    }, [oldTitle, keeponUnmount])
 }
