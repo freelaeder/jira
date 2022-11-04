@@ -4,6 +4,8 @@ import * as auth from 'auth-provider'
 import {User} from "../screens/project-list/search-panel";
 import {http} from 'utils/http'
 import {useMount} from "../utils";
+import {useAsync} from "../utils/use-async";
+import {FullPageErrorFallback, FullPageLoading} from "../components/lib";
 // 初始化user
 // 解决 用户登录页面刷新  退出问题
 const bootstrapUser = async () => {
@@ -32,7 +34,7 @@ AuthContext.displayName = "AuthContext";
 // 逻辑处理
 export const AuthProvider = ({children}: { children: ReactNode }) => {
     // 用户信息
-    const [user, setUser] = useState<User | null>(null);
+    const {data: user, error, isLoading, isIdle, isError, run, setData: setUser} = useAsync<User | null>()
     // 登录
     // point free
     const login = (form: auth.IAuthParam) => auth.login(form).then(setUser);
@@ -45,8 +47,16 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     useMount(() => {
         // bootstrapUser 从location 中 找token
         // 能找到 发送请求到me 请求user信息
-        bootstrapUser().then(setUser)
+        run(bootstrapUser())
     })
+    // 加载中展示loading
+    if(isIdle || isLoading){
+        return <FullPageLoading />
+    }
+    // 当发生错误
+    if(isError){
+        return <FullPageErrorFallback error={error} />
+    }
     return (
         <AuthContext.Provider
             children={children}

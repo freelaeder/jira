@@ -1,4 +1,7 @@
 import styled from "@emotion/styled";
+import {Spin, Typography} from "antd";
+import {DevTools} from "jira-dev-tool";
+import React from "react";
 
 // css 样式增强
 export const Row = styled.div<{
@@ -18,3 +21,20 @@ export const Row = styled.div<{
   }
 
 `
+
+// loading组件
+const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+export const FullPageLoading = () => <FullPage>
+    <Spin size={'large'}/>
+</FullPage>
+
+// 错误信息
+export const FullPageErrorFallback = ({error}: { error: Error | null }) => <FullPage>
+    <DevTools/>
+    <Typography.Text type={'danger'}>{error?.message}</Typography.Text>
+</FullPage>

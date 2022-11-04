@@ -34,8 +34,10 @@ export const AuthenticatedApp = () => {
     const items: MenuItem[] = [
         getItem('logout', '1', )
     ]
+    const users:any = undefined
     return (
         <Container>
+            {users.message}
             {/*// 头部*/}
             {/*between = true ===  justify-content: space-between*/}
             <Header between={true}>

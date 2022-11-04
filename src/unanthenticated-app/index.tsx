@@ -23,6 +23,8 @@ export const UnanthenticatedApp = () => {
             {/*header*/}
             <Header/>
             <Background/>
+            {/*抛出异常*/}
+            <Button onClick={() => {throw new Error('d')}}>click error</Button>
             {/*卡片*/}
             <ShadowCard>
                 {/*标题*/}
