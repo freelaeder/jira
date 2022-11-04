@@ -35,7 +35,6 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     // 登录
     // point free
-    // const login = (form: auth.IAuthParam) => auth.login(form).then(user => setUser(user));
     const login = (form: auth.IAuthParam) => auth.login(form).then(setUser);
     // 注册
     const register = (form: auth.IAuthParam) => auth.register(form).then(setUser);

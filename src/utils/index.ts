@@ -5,19 +5,17 @@ import {useEffect, useState} from "react";
 
 export const isFasy = (value: unknown) => value === 0 ? false : !value
 // cleanObject 会清空 value 为空的 key 返回新的 对象
-// @ts-ignore
-export const cleanObject = (object: object) => {
+export const isVoid = (value: unknown) => value === undefined || value === null || value === ''
+export const cleanObject = (object: { [key: string]: unknown }) => {
     const result = {...object}
     Object.keys(result).forEach(key => {
         // 属性值
         // console.log(key,'key-----')
         // console.log(result[key],'value---')
-        // @ts-ignore
         const value = result[key]
         // 如果 这个value 不存在 删除
         // 不排除 0
-        if (isFasy(value)) {
-            // @ts-ignore
+        if (isVoid(value)) {
             delete result[key]
         }
     })
@@ -35,6 +33,8 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
     useEffect(() => {
         callback()
+        // todo 依赖项里加上callback 会造成无限循环 useCallback 以及 useMount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 }
 
@@ -50,7 +50,7 @@ export const useMount = (callback: () => void) => {
 //         },delay)
 //     }
 // }
-export const useDebounce = <V>(value: V, delay = 500 ) => {
+export const useDebounce = <V>(value: V, delay = 500) => {
     const [debounceValue, setDebounce] = useState(value)
     useEffect(() => {
         // 每次在value变化后 设置一个定时器
@@ -61,18 +61,18 @@ export const useDebounce = <V>(value: V, delay = 500 ) => {
     return debounceValue
 }
 
-const useArray = <T>(initialArray:T[]) =>{
-    const [value,setValue] = useState(initialArray)
-    return {
-        value,
-        setValue,
-        add:(item:T) => setValue([...value,item]),
-        clear:() =>setValue([]),
-        removeIndex:(index:number) => {
-            const copy = [...value]
-            copy.splice(index,1)
-            setValue(copy)
-
-        }
-    }
-}
+// const useArray = <T>(initialArray:T[]) =>{
+//     const [value,setValue] = useState(initialArray)
+//     return {
+//         value,
+//         setValue,
+//         add:(item:T) => setValue([...value,item]),
+//         clear:() =>setValue([]),
+//         removeIndex:(index:number) => {
+//             const copy = [...value]
+//             copy.splice(index,1)
+//             setValue(copy)
+//
+//         }
+//     }
+// }

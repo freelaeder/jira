@@ -3,7 +3,7 @@
 import {useState} from "react";
 import RegisterScreen from "./register";
 import LoginScreen from "./login";
-import {Button, Card, Divider} from "antd";
+import {Button, Card, Divider, Typography} from "antd";
 // 引入 amotion
 import styled from "@emotion/styled";
 // 引入图片
@@ -15,6 +15,8 @@ export const UnanthenticatedApp = () => {
     // 定义在 login 和 register 之间切换的状态
     // 默认登录界面
     const [IsRegister, SetIsRegister] = useState(false)
+    // 登录失败显示的错误信息
+    const [error, setError] = useState<Error | null>(null)
     return (
 
         <Container>
@@ -25,16 +27,19 @@ export const UnanthenticatedApp = () => {
             <ShadowCard>
                 {/*标题*/}
                 <Title>
-                    {IsRegister ? '请注册' : '请登录' }
+                    {IsRegister ? '请注册' : '请登录'}
                 </Title>
+                {/*错误信息*/}
+                {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
                 {/*显示的组件*/}
                 {
-                    IsRegister ? <RegisterScreen/> : <LoginScreen/>
+                    IsRegister ? <RegisterScreen onError={setError}/> : <LoginScreen onError={setError} />
                 }
                 {/*分割线*/}
                 <Divider/>
                 {/*    按钮点击切换 显示组件*/}
-                <a onClick={() => SetIsRegister(!IsRegister)}>{IsRegister ? '已有账号了?直接登录' : '没有账号，注册一个新账号'}</a>
+                <Button type={'link'}
+                        onClick={() => SetIsRegister(!IsRegister)}>{IsRegister ? '已有账号了?直接登录' : '没有账号，注册新账号'}</Button>
             </ShadowCard>
         </Container>
     )
@@ -83,6 +88,6 @@ const Title = styled.h2`
   color: rgb(94, 108, 132);
 `
 // 登录按钮
-export  const LoginButon = styled(Button)`
-    width: 100%;
+export const LoginButon = styled(Button)`
+  width: 100%;
 `

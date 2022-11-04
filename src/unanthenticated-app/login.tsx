@@ -1,27 +1,34 @@
-import React, {FormEvent, useEffect} from 'react';
+import React from 'react';
 import {useAuth} from "../context/auth-context";
-import {Button, Form} from "antd";
+import {Form, Typography} from "antd";
 import {LoginButon} from "./index";
+import {useAsync} from "../utils/use-async";
 
 // 登录页面
-const LoginScreen = () => {
+const LoginScreen = ({onError}: { onError: (error: Error) => void }) => {
     // 调用自定义hook  获取全局状态
-    const {login, user} = useAuth()
+    const {login} = useAuth()
+    const {run, isLoading, error} = useAsync(undefined, {thorwOnError: true})
     // 表单验证通过触发的提交事件
-    const handleSubmit = (values:{username:string,password:string}) => {
-        console.log(values)
-        login(values)
+    const handleSubmit = async (values: { username: string, password: string }) => {
+        try {
+            await run(login(values))
+        } catch (e: any) {
+            onError(e)
+        }
     }
     return (
         <Form onFinish={handleSubmit}>
-            <Form.Item name={'username'} rules={[{required:true,message:'请输入用户名'}]}>
+            {/*错误信息*/}
+            {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
+            <Form.Item name={'username'} rules={[{required: true, message: '请输入用户名'}]}>
                 <input placeholder={'请输入用户名'} type="text " id={'username'}/>
             </Form.Item>
-            <Form.Item name={'password'} rules={[{required:true,message:'请输入密码'}]}>
+            <Form.Item name={'password'} rules={[{required: true, message: '请输入密码'}]}>
                 <input placeholder={'请输入密码'} type="text " id={'password'}/>
             </Form.Item>
             <Form.Item>
-                <LoginButon htmlType={'submit'} type={'primary'} >login</LoginButon>
+                <LoginButon loading={isLoading} htmlType={'submit'} type={'primary'}>login</LoginButon>
             </Form.Item>
         </Form>
     );

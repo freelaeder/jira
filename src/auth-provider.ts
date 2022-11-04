@@ -29,7 +29,7 @@ export const login = (data: IAuthParam) => {
             // alert('登陆成功')
             return handleUserResponse(await res.json());
         } else {
-            return Promise.reject(data);
+            return Promise.reject(await res.json());
         }
     });
 };
@@ -47,12 +47,11 @@ export const register = (data: IAuthParam) => {
             // alert('注册成功')
             return handleUserResponse(await res.json());
         } else {
-            return Promise.reject(data);
+            return Promise.reject(await res.json());
         }
     });
 };
 
 export const logout = async () => {
-    console.log('logout')
     localStorage.removeItem(localStoreageKey);
 };

@@ -1,58 +1,33 @@
 import {SearchPanel} from "./search-panel"
 import {List} from "./list"
-import {useEffect, useState} from "react";
-import {cleanObject, useDebounce, useMount} from "../../utils";
-import {useHttp} from "../../utils/http";
+import {useState} from "react";
+import {useDebounce} from "../../utils";
 import styled from "@emotion/styled";
+import {useProjects} from "../../utils/project";
+import {useUsers} from "../../utils/user";
+import {Typography} from "antd";
 
 export const ProjectListScreen = () => {
-    // 保存 用户名 项目名
+    // 保存用户输入的项目名 用户Id
     const [param, setParam] = useState({
         name: '',
         personId: ''
     })
-    // 保存 用户
-    const [users, setUsers] = useState([])
-
-    // 定义一个list 保存项目信息
-    const [list, setList] = useState([])
-    // 使用usedebounce
+    // 使用 useDebounce 减少请求频率
     const debouncedParam = useDebounce(param, 500)
-    // 使用 useHttp
-    const client = useHttp()
 
-    // 发送请求 获取projects
-    useEffect(() => {
-        // client('projects',{data:cleanObject(debouncedParam)}).then((data) => setList(data))
-        // 两个代码效果一致
-        //
-        client('projects', {data: cleanObject(debouncedParam)}).then(setList)
-        // qs stringify 会自动转化 拼接  projects?personId=1
-        // cleanObject 会清空 value 为空的 key
-        // fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`).then(async response => {
-        //     if (response.ok) {
-        //         setList(await response.json())
-        //     }
-        // })
-    }, [debouncedParam])
-    // [param] 当值 发生改变 再次执行 effect
-    // deps 不写 监测全部
-    // 发送请求 保存 users
-    // useEffect(() => {
-    //     fetch(`${apiUrl}/users`).then(async response => {
-    //         if (response.ok) {
-    //             setUsers(await response.json())
-    //         }
-    //     })
-    // }, [])     // deps []  只运行一次的 effect（仅在组件挂载和卸载时执行）
-    useMount(() => {
-        client('users').then(setUsers)
-    })
+    // 使用useProjects 获取项目列表
+    const {isLoading, error, data: list} = useProjects(debouncedParam)
+    // 获取用户
+    const {data: users} = useUsers()
+
     return (
         <Container>
             <h1>项目列表</h1>
-            <SearchPanel users={users} param={param} setParam={setParam}/>
-            <List users={users} list={list}/>
+            <SearchPanel users={users || []} param={param} setParam={setParam}/>
+            {/*如果发生错误*/}
+            {error ?  <Typography.Text type={'danger'}>{error.message} </Typography.Text> : null }
+            <List loading={isLoading} users={users || []} dataSource={list || []}/>
         </Container>
     )
 }

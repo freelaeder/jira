@@ -52,7 +52,6 @@ export const http = async (endpoint: string, {data, token, headers, ...customCon
 // 自动添加token
 export const useHttp = () => {
     const {user} = useAuth()
-    // return ([endpoint,config]:[string,Config]) => http(endpoint,{...config,token:user?.token})
     // Parameters 传入函数类型 变成参数类型
     //utility type 用泛型传入一个其他类型
     return (...[endpoint, config]: Parameters<typeof http>) => http(endpoint, {...config, token: user?.token})

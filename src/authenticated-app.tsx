@@ -5,10 +5,35 @@ import {useAuth} from "./context/auth-context";
 import styled from "@emotion/styled";
 import {Row} from "./components/lib";
 import {ReactComponent as SoftWareLogo} from 'assets/software-logo.svg'
-import {Dropdown, Menu} from "antd";
+import {Button, Dropdown, Menu} from "antd";
+// menu
+import type {MenuProps} from 'antd/es/menu';
+import React from "react";
+// icons
+import { LogoutOutlined, SmileTwoTone } from "@ant-design/icons";
 
 export const AuthenticatedApp = () => {
-    const {logout, user} = useAuth()
+    const {user, logout} = useAuth()
+
+    type MenuItem = Required<MenuProps>['items'][number];
+    // 返回 items
+    function getItem(
+        label: React.ReactNode,
+        key?: React.Key | null,
+        icon?: React.ReactNode,
+        children?: MenuItem[],
+    ): MenuItem {
+        return {
+            key,
+            icon,
+            children,
+            label,
+        } as MenuItem;
+    }
+
+    const items: MenuItem[] = [
+        getItem('logout', '1', )
+    ]
     return (
         <Container>
             {/*// 头部*/}
@@ -21,15 +46,12 @@ export const AuthenticatedApp = () => {
                     <h3>user</h3>
                 </HeaderLeft>
                 <HeaderRight>
-                    <Dropdown overlay={<Menu>
-                        <Menu.Item key={'logout'}>
-                            <a onClick={logout}> 登出</a>
-                        </Menu.Item>
-                    </Menu>}>
-                        {/*防止页面刷新*/}
-                        <a onClick={e => e.preventDefault()}>
-                            Hi, {user?.name}
-                        </a>
+                    {/*<UserOutlined twoToneColor="#eb2f96" style={{ fontSize: '16px', color: '#08c' }} />*/}
+                    <SmileTwoTone spin={true} style={{ fontSize: '16px', color: '#08c' }} />
+                    <Dropdown overlay={
+                        <Menu overflowedIndicator={<LogoutOutlined />} theme={'light'} onClick={logout} items={items}/>
+                    }>
+                        <Button onClick={e => e.preventDefault()} type={'link'}> Hi, {user?.name} </Button>
                     </Dropdown>
 
                 </HeaderRight>
