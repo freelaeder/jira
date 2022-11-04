@@ -4,27 +4,29 @@ import {useState} from "react";
 import RegisterScreen from "./register";
 import LoginScreen from "./login";
 import {Button, Card, Divider, Typography} from "antd";
-// 引入 amotion
+// 引入 emotion
 import styled from "@emotion/styled";
 // 引入图片
 import logo from 'assets/logo.svg'
 import left from 'assets/left.svg'
 import right from 'assets/right.svg'
-
+import {useDocumentTitle} from "../utils";
+// 导入 react-helmet
 export const UnanthenticatedApp = () => {
     // 定义在 login 和 register 之间切换的状态
     // 默认登录界面
     const [IsRegister, SetIsRegister] = useState(false)
     // 登录失败显示的错误信息
     const [error, setError] = useState<Error | null>(null)
+    // 改变当前页面title
+    // useDocumentTitle('请登录注册以继续')
     return (
 
         <Container>
+
             {/*header*/}
             <Header/>
             <Background/>
-            {/*抛出异常*/}
-            <Button onClick={() => {throw new Error('d')}}>click error</Button>
             {/*卡片*/}
             <ShadowCard>
                 {/*标题*/}
@@ -35,7 +37,7 @@ export const UnanthenticatedApp = () => {
                 {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
                 {/*显示的组件*/}
                 {
-                    IsRegister ? <RegisterScreen onError={setError}/> : <LoginScreen onError={setError} />
+                    IsRegister ? <RegisterScreen onError={setError}/> : <LoginScreen onError={setError}/>
                 }
                 {/*分割线*/}
                 <Divider/>

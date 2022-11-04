@@ -1,7 +1,7 @@
 import {SearchPanel} from "./search-panel"
 import {List} from "./list"
 import {useState} from "react";
-import {useDebounce} from "../../utils";
+import {useDebounce, useDocumentTitle} from "../../utils";
 import styled from "@emotion/styled";
 import {useProjects} from "../../utils/project";
 import {useUsers} from "../../utils/user";
@@ -20,7 +20,8 @@ export const ProjectListScreen = () => {
     const {isLoading, error, data: list} = useProjects(debouncedParam)
     // 获取用户
     const {data: users} = useUsers()
-
+    // 改变当前页面title
+    useDocumentTitle('项目列表',false)
     return (
         <Container>
             <h1>项目列表</h1>

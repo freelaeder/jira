@@ -76,3 +76,23 @@ export const useDebounce = <V>(value: V, delay = 500) => {
 //         }
 //     }
 // }
+
+
+// 改变当前页面的title
+// keeponUnmount true 保留title
+export const useDocumentTitle = (title: string, keeponUnmount = true) => {
+    // 记录页面刚加载的title
+    const oldTitle = document.title
+    useEffect(() => {
+        document.title = title
+    }, [title])
+    // 页面卸载
+    useEffect(() => {
+        //页面卸载时调用
+        return () => {
+            if (!keeponUnmount) {
+                document.title = oldTitle
+            }
+        }
+    }, [])
+}
