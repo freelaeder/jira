@@ -101,3 +101,5 @@ export const useDocumentTitle = (title: string, keeponUnmount = true) => {
 
     }, [oldTitle, keeponUnmount])
 }
+// 重置路由跳转 并且刷新
+export const resetRoute = () => window.location.href = window.location.origin
