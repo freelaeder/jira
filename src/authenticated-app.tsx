@@ -5,12 +5,12 @@ import {useAuth} from "./context/auth-context";
 import styled from "@emotion/styled";
 import {Row} from "./components/lib";
 import {ReactComponent as SoftWareLogo} from 'assets/software-logo.svg'
-import {Button, Dropdown, Menu} from "antd";
+import {Button, Dropdown} from "antd";
 // menu
 import type {MenuProps} from 'antd/es/menu';
 import React from "react";
 // icons
-import {LogoutOutlined, SmileTwoTone} from "@ant-design/icons";
+import { SmileTwoTone} from "@ant-design/icons";
 // react-route 管理路由状态 就像一个变量，计算当前对象 结果交给react-route-dom 消费 /
 import {Navigate, Route, Routes} from 'react-router'
 import ProjectScreen from "./screens/project";
@@ -61,10 +61,15 @@ const PageHeader = () => {
             label,
         } as MenuItem;
     }
-
+    // 展示的label 项
     const items: MenuItem[] = [
         getItem('logout', '1',)
     ]
+    // 定义点击item项触发的事件 登出操作
+    const onClick: MenuProps['onClick'] = ({ key }) => {
+        // message.warn('即将退出',1);
+        logout()
+    };
     return <Header between={true}>
         {/*gap =true  === margin-right: 2rem */}
         <HeaderLeft gap={true}>
@@ -78,9 +83,8 @@ const PageHeader = () => {
         <HeaderRight>
             {/*<UserOutlined twoToneColor="#eb2f96" style={{ fontSize: '16px', color: '#08c' }} />*/}
             <SmileTwoTone spin={true} style={{fontSize: '16px', color: '#08c'}}/>
-            <Dropdown overlay={
-                <Menu overflowedIndicator={<LogoutOutlined/>} theme={'light'} onClick={logout} items={items}/>
-            }>
+            <Dropdown menu={{items,onClick}}
+            >
                 <Button onClick={e => e.preventDefault()} type={'link'}> Hi, {user?.name} </Button>
             </Dropdown>
 

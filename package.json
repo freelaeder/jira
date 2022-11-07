@@ -14,6 +14,7 @@
     "@types/node": "^16.11.58",
     "@types/react": "^18.0.19",
     "@types/react-dom": "^18.0.6",
+    "@welldone-software/why-did-you-render": "^7.0.1",
     "antd": "^4.23.6",
     "concurrently": "^7.4.0",
     "craco-less": "^2.0.0",

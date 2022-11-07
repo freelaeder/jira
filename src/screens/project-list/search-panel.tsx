@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import {Form, Input, Select} from "antd";
+import {Project} from "./list";
+import UserSelect from "../../components/user-select";
 
 export interface User {
-    id: string
+    id: number
     name: string
     email: string
     title: string
@@ -12,10 +14,8 @@ export interface User {
 
 interface SearchPanelProps {
     users: User[],
-    param: {
-        name: string
-        personId: string
-    },
+    // 从Project 拿出 name personId
+    param: Partial<Pick<Project, 'name' | 'personId'>>
     setParam: (param: SearchPanelProps['param']) => void
 
 }
@@ -32,13 +32,13 @@ export const SearchPanel = ({param, setParam, users}: SearchPanelProps) => {
         </Form.Item>
         <Form.Item>
             {/*点击切换 动态改变 personId */}
-            <Select value={param.personId} onChange={value => setParam({
-                ...param,
-                personId: value
-            })}>
-                <Select.Option value={''}>负责人</Select.Option>
-                {users.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
-            </Select>
+            <UserSelect
+                defaultOptionName={'负责人'}
+                value={param.personId}
+                onChange={value => setParam({
+                    ...param,
+                    personId: value
+                })}/>
         </Form.Item>
     </Form>
 }

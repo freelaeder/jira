@@ -1,6 +1,6 @@
 import React from 'react';
 import {useAuth} from "../context/auth-context";
-import {Form, Typography} from "antd";
+import {Form, message, Typography} from "antd";
 import {LoginButon} from "./index";
 import {useAsync} from "../utils/use-async";
 
@@ -13,6 +13,7 @@ const LoginScreen = ({onError}: { onError: (error: Error) => void }) => {
     const handleSubmit = async (values: { username: string, password: string }) => {
         try {
             await run(login(values))
+            message.success('登录成功', 1.5)
         } catch (e: any) {
             onError(e)
         }
