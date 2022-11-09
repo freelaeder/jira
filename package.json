@@ -21,7 +21,7 @@
     "dayjs": "^1.11.6",
     "eslint-config-prettier": "^8.5.0",
     "fetch-mock": "^9.11.0",
-    "jira-dev-tool": "^1.7.61",
+    "jira-dev-tool": "^1.6.59",
     "json-server": "^0.17.0",
     "node-releases": "^2.0.6",
     "qs": "^6.11.0",

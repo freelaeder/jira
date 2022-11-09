@@ -3,11 +3,14 @@ import {Table, TableProps} from "antd";
 import dayjs from "dayjs";
 // 宿主环境 浏览器
 import {Link} from 'react-router-dom'
+import {Pin} from "../../components/pin";
+import {useEditProject} from "../../utils/project";
 
 export interface Project {
     id: number
     name: string
     personId: number
+    // 是否收藏
     pin: boolean
     organization: string
     created: number
@@ -19,11 +22,25 @@ export interface listProps extends TableProps<Project> {
 }
 
 export const List = ({users, ...props}: listProps) => {
+    const {mutate} = useEditProject()
+    // 先知道project.id先消化
+    const pinProject = (id: number) => (pin: boolean) => {
+        mutate({id, pin})
+    }
 
     return (
         // rowKey 每一行的 unique key
         <Table rowKey={(list) => list.id} pagination={false}
                columns={[
+                   {
+                       title: <Pin checked={true} disabled={true}/>,
+                       render(value, project) {
+                           return <Pin
+                               checked={project.pin}
+                               onCheckedChange={pinProject(project.id)}
+                           />
+                       }
+                   },
                    {
                        title: '名称',
                        align: 'center',

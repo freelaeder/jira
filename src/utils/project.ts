@@ -17,3 +17,34 @@ export const useProjects = (param?: Partial<Project>) => {
     }, [param])
     return result
 }
+
+// 编辑收藏的状态
+export const useEditProject = () => {
+    const { run, ...asyncResult } = useAsync<Project[]>();
+    const httpFetch = useHttp();
+    const mutate = (params: Partial<Project>) => {
+        return httpFetch(`projects/${params.id}`, {
+            data: params,
+            method: "PATCH",
+        })
+    }
+    return {
+        mutate,
+        ...asyncResult
+    }
+}
+
+// 添加收藏的状态
+export const useAddProject = () => {
+    const {run, ...asyncResult} = useAsync()
+    const client = useHttp()
+    // id 编辑的信息
+    const mutate = (params: Partial<Project>) => {
+        run(client(`projects/${params.id}`, {
+            data: params,
+            method: 'POST'
+        }))
+    }
+
+    return {mutate, ...asyncResult}
+}
