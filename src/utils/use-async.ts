@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useMountedRef} from "./index";
 
 // 处理loading error
 
@@ -28,6 +29,8 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         ...defaultInitialState,
         ...initialState
     })
+    // 当前组件的挂载状态
+    const mountedRef = useMountedRef()
     // 定义retry 用来保存用户编辑之后的刷新页面
     const [retry, setRetry] = useState(() => () => {
     })
@@ -61,7 +64,9 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         setState({...state, stat: 'loading'})
         return promise
             .then(data => {
-                setData(data)
+                // 如果组件存在 设置值
+                if(mountedRef.current)
+                    setData(data)
                 return data
             })
             .catch(error => {
