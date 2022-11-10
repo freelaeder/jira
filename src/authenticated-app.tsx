@@ -8,28 +8,31 @@ import {ReactComponent as SoftWareLogo} from 'assets/software-logo.svg'
 import {Button, Dropdown} from "antd";
 // menu
 import type {MenuProps} from 'antd/es/menu';
-import React from "react";
+import React, {useState} from "react";
 // icons
-import { SmileTwoTone} from "@ant-design/icons";
+import {SmileTwoTone} from "@ant-design/icons";
 // react-route 管理路由状态 就像一个变量，计算当前对象 结果交给react-route-dom 消费 /
 import {Navigate, Route, Routes} from 'react-router'
 import ProjectScreen from "./screens/project";
 import {BrowserRouter as Router} from 'react-router-dom'
 import {resetRoute} from "./utils";
+import {ProjectModal} from "./screens/project-list/project-modal";
+import {ProjectPopover} from "./components/project-popover";
 
 export const AuthenticatedApp = () => {
-
+    // 定义编辑项目的开关
+    const [projectModalOpen, setProjectModalOpen] = useState(false)
 
     return (
         <Container>
-            <PageHeader/>
+            <PageHeader setProjectModalOpen={setProjectModalOpen}/>
             {/*// 主体内容*/}
             <Main>
                 {/*    路由*/}
                 <Router>
                     <Routes>
                         {/*项目列表*/}
-                        <Route path={'/projects'} element={<ProjectListScreen/>}></Route>
+                        <Route path={'/projects'} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen} />}></Route>
                         {/*详细项目页*/}
                         <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}></Route>
                         {/*    设置路由重定向*/}
@@ -39,11 +42,29 @@ export const AuthenticatedApp = () => {
                 </Router>
 
             </Main>
+            <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}/>
         </Container>
     )
 }
 
-const PageHeader = () => {
+const PageHeader = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
+    return <Header between={true}>
+        {/*gap =true  === margin-right: 2rem */}
+        <HeaderLeft gap={true}>
+            <Button style={{paddingRight: 0}} type={'link'} onClick={resetRoute}>
+                <SoftWareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
+            </Button>
+            <ProjectPopover setProjectModalOpen={props.setProjectModalOpen}/>
+            <span>用户</span>
+        </HeaderLeft>
+        <HeaderRight>
+            <User/>
+        </HeaderRight>
+    </Header>
+
+}
+
+const User = () => {
     const {user, logout} = useAuth()
     type MenuItem = Required<MenuProps>['items'][number];
 
@@ -61,35 +82,23 @@ const PageHeader = () => {
             label,
         } as MenuItem;
     }
+
     // 展示的label 项
     const items: MenuItem[] = [
         getItem('logout', '1',)
     ]
     // 定义点击item项触发的事件 登出操作
-    const onClick: MenuProps['onClick'] = ({ key }) => {
+    const onClick: MenuProps['onClick'] = ({key}) => {
         // message.warn('即将退出',1);
         logout()
     };
-    return <Header between={true}>
-        {/*gap =true  === margin-right: 2rem */}
-        <HeaderLeft gap={true}>
-            <Button type={'link'} onClick={resetRoute} >
-                <SoftWareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
-            </Button>
-
-            <h3>project</h3>
-            <h3>user</h3>
-        </HeaderLeft>
-        <HeaderRight>
-            {/*<UserOutlined twoToneColor="#eb2f96" style={{ fontSize: '16px', color: '#08c' }} />*/}
-            <SmileTwoTone spin={true} style={{fontSize: '16px', color: '#08c'}}/>
-            <Dropdown menu={{items,onClick}}
-            >
-                <Button onClick={e => e.preventDefault()} type={'link'}> Hi, {user?.name} </Button>
-            </Dropdown>
-
-        </HeaderRight>
-    </Header>
+    return <>
+        <SmileTwoTone spin={true} style={{fontSize: '16px', color: '#08c'}}/>
+        <Dropdown menu={{items, onClick}}
+        >
+            <Button onClick={e => e.preventDefault()} type={'link'}> Hi, {user?.name} </Button>
+        </Dropdown>
+    </>
 
 }
 const Container = styled.div`

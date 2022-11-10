@@ -1,6 +1,7 @@
 import qs from "qs"
 import * as auth from 'auth-provider'
 import {useAuth} from "../context/auth-context";
+import {useCallback} from "react";
 // 导入 服务器地址
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -54,5 +55,7 @@ export const useHttp = () => {
     const {user} = useAuth()
     // Parameters 传入函数类型 变成参数类型
     //utility type 用泛型传入一个其他类型
-    return (...[endpoint, config]: Parameters<typeof http>) => http(endpoint, {...config, token: user?.token})
+    return useCallback(
+        (...[endpoint, config]: Parameters<typeof http>) => http(endpoint, {...config, token: user?.token}),
+        [user?.token])
 }

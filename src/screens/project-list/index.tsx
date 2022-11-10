@@ -4,11 +4,12 @@ import {useDebounce, useDocumentTitle} from "../../utils";
 import styled from "@emotion/styled";
 import {useProjects} from "../../utils/project";
 import {useUsers} from "../../utils/user";
-import {Typography} from "antd";
+import {Button, Typography} from "antd";
 import {useUrlQueryParam} from "../../utils/url";
 import {useProjectsSearchParams} from "./util";
+import {Row} from "../../components/lib";
 
-export const ProjectListScreen = () => {
+export const ProjectListScreen = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
     // 改变当前页面title false 离开项目列表时， 页面还原初始值
     useDocumentTitle('项目列表', false)
     // 保存用户输入的项目名 用户Id
@@ -17,17 +18,20 @@ export const ProjectListScreen = () => {
     const [param, setParam] = useProjectsSearchParams()
     // 使用 useDebounce 减少请求频率
     // 使用useProjects 获取项目列表
-    const {isLoading, error, data: list,retry} = useProjects(useDebounce(param, 200))
+    const {isLoading, error, data: list, retry} = useProjects(useDebounce(param, 200))
     // 获取用户
     const {data: users} = useUsers()
 
     return (
         <Container>
-            <h1>项目列表</h1>
+            <Row between={true}>
+                <h1 style={{paddingBottom:'0.5rem'}}>项目列表</h1>
+                <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+            </Row>
             <SearchPanel users={users || []} param={param} setParam={setParam}/>
             {/*如果发生错误*/}
             {error ? <Typography.Text type={'danger'}>{error.message} </Typography.Text> : null}
-            <List refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}/>
+            <List setProjectModalOpen={props.setProjectModalOpen}  refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}/>
         </Container>
     )
 }

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {useMountedRef} from "./index";
 
 // 处理loading error
@@ -36,50 +36,52 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     })
 
     //请求成功 保存数据
-    const setData = (data: D) => setState({
+    const setData = useCallback((data: D) => setState({
         data,
         stat: 'success',
         error: null
-    })
+    }), [])
     //请求失败 处理数据
-    const setError = (error: Error) => setState({
-        error,
-        stat: 'error',
-        data: null
-    })
+    const setError = useCallback((error: Error) => setState({
+            error,
+            stat: 'error',
+            data: null
+        }),
+        [])
     //  用来触发异步请求
-    const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
-        if (!promise || !promise.then()) {
-            throw new Error('请传入Promise 类型数据')
-        }
-        // 当第一次请求时将该请求函数保存起来，以供后面刷新数据使用
-        setRetry(() => () => {
-            console.log('set retry')
-            // 如果存在
-            if (runConfig?.retry) {
-                run(runConfig?.retry(), runConfig)
+    const run = useCallback(
+        (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+            if (!promise || !promise.then()) {
+                throw new Error('请传入Promise 类型数据')
             }
-        })
-        // 更新加载状态 loading
-        setState({...state, stat: 'loading'})
-        return promise
-            .then(data => {
-                // 如果组件存在 设置值
-                if(mountedRef.current)
-                    setData(data)
-                return data
+            // 当第一次请求时将该请求函数保存起来，以供后面刷新数据使用
+            setRetry(() => () => {
+                console.log('set retry')
+                // 如果存在
+                if (runConfig?.retry) {
+                    run(runConfig?.retry(), runConfig)
+                }
             })
-            .catch(error => {
-                // catch 会消化异常 如果不主动抛出，外面接受不到异常
-                setError(error)
-                // 同步
-                if (config.thorwOnError) return Promise.reject(error)
-                // return error 不可以 异步
-                return error
+            // 更新加载状态 loading
+            setState(prevState => ({...prevState, stat: 'loading'}))
+            return promise
+                .then(data => {
+                    // 如果组件存在 设置值
+                    if (mountedRef.current)
+                        setData(data)
+                    return data
+                })
+                .catch(error => {
+                    // catch 会消化异常 如果不主动抛出，外面接受不到异常
+                    setError(error)
+                    // 同步
+                    if (config.thorwOnError) return Promise.reject(error)
+                    // return error 不可以 异步
+                    return error
 
 
-            })
-    }
+                })
+        }, [config.thorwOnError, mountedRef, setData, setError])
     return {
         isIdle: state.stat === 'idle',
         isLoading: state.stat === 'loading',

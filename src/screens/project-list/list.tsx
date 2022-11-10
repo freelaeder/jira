@@ -1,10 +1,14 @@
 import {User} from "./search-panel";
-import {Table, TableProps} from "antd";
+import {Dropdown, Table, TableProps} from "antd";
 import dayjs from "dayjs";
 // 宿主环境 浏览器
 import {Link} from 'react-router-dom'
 import {Pin} from "../../components/pin";
 import {useEditProject} from "../../utils/project";
+import {ButtonNoPadding} from "../../components/lib";
+import {useAuth} from "../../context/auth-context";
+import {MenuProps} from "antd/es/menu";
+import React from "react";
 
 export interface Project {
     id: number
@@ -19,6 +23,7 @@ export interface Project {
 export interface listProps extends TableProps<Project> {
     users: User[],
     refresh?:() =>void,
+    setProjectModalOpen: (isOpen:boolean) => void
 
 }
 
@@ -27,6 +32,33 @@ export const List = ({users, ...props}: listProps) => {
     // 先让project.id先消化
     const pinProject = (id: number) => (pin: boolean) => mutate({id,pin}).then(props.refresh)
 
+    // dropdown
+    type MenuItem = Required<MenuProps>['items'][number];
+
+    // 返回 items
+    function getItem(
+        label: React.ReactNode,
+        key?: React.Key | null,
+        icon?: React.ReactNode,
+        children?: MenuItem[],
+    ): MenuItem {
+        return {
+            key,
+            icon,
+            children,
+            label,
+        } as MenuItem;
+    }
+
+    // 展示的label 项
+    const items: MenuItem[] = [
+        getItem('编辑', '1',)
+    ]
+    // 定义点击item项触发的事件 登出操作
+    const onClick: MenuProps['onClick'] = ({key}) => {
+        // message.warn('即将退出',1);
+        props.setProjectModalOpen(true)
+    };
     return (
         // rowKey 每一行的 unique key
         <Table rowKey={(list) => list.id} pagination={false}
@@ -43,6 +75,7 @@ export const List = ({users, ...props}: listProps) => {
                    {
                        title: '名称',
                        align: 'center',
+                       width:'30rem',
                        sorter: (a, b) => a.name.localeCompare(b.name),
                        render(value, project) {
                            return <Link to={String(project.id)}>{project.name}</Link>
@@ -71,7 +104,18 @@ export const List = ({users, ...props}: listProps) => {
                         </span>
                            )
                        }
+                   },
+                   {
+                       render(value,project){
+                           return (
+                               <Dropdown menu={{items,onClick}}>
+                                   <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
+                               </Dropdown>
+                           )
+                       }
+
                    }
+
 
                ]}
                {...props}
