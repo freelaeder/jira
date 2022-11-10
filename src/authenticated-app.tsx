@@ -3,7 +3,7 @@
 import {ProjectListScreen} from "./screens/project-list";
 import {useAuth} from "./context/auth-context";
 import styled from "@emotion/styled";
-import {Row} from "./components/lib";
+import {ButtonNoPadding, Row} from "./components/lib";
 import {ReactComponent as SoftWareLogo} from 'assets/software-logo.svg'
 import {Button, Dropdown} from "antd";
 // menu
@@ -18,6 +18,8 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {resetRoute} from "./utils";
 import {ProjectModal} from "./screens/project-list/project-modal";
 import {ProjectPopover} from "./components/project-popover";
+import {jsx} from "@emotion/react";
+import JSX = jsx.JSX;
 
 export const AuthenticatedApp = () => {
     // 定义编辑项目的开关
@@ -25,7 +27,9 @@ export const AuthenticatedApp = () => {
 
     return (
         <Container>
-            <PageHeader setProjectModalOpen={setProjectModalOpen}/>
+            <PageHeader
+                projectButton = {   <ButtonNoPadding onClick={() => setProjectModalOpen(true)} type={'link'}> 创建项目 </ButtonNoPadding>}
+            />
             {/*// 主体内容*/}
             <Main>
                 {/*    路由*/}
@@ -47,14 +51,14 @@ export const AuthenticatedApp = () => {
     )
 }
 
-const PageHeader = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
+const PageHeader = (props: { projectButton:JSX.Element }) => {
     return <Header between={true}>
         {/*gap =true  === margin-right: 2rem */}
         <HeaderLeft gap={true}>
             <Button style={{paddingRight: 0}} type={'link'} onClick={resetRoute}>
                 <SoftWareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
             </Button>
-            <ProjectPopover setProjectModalOpen={props.setProjectModalOpen}/>
+            <ProjectPopover {...props}/>
             <span>用户</span>
         </HeaderLeft>
         <HeaderRight>
