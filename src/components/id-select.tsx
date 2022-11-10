@@ -5,7 +5,7 @@ import React from "react";
 
 /**
  * Raw === string | number
- * SelectProps 从原有select组件 拿来所有的属性
+ * SelectProps 从原有select组件 拿来所有的类性
  * */
 type SelectProps = React.ComponentProps<typeof Select>
 

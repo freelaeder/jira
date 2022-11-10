@@ -17,7 +17,7 @@ export const ProjectListScreen = () => {
     const [param, setParam] = useProjectsSearchParams()
     // 使用 useDebounce 减少请求频率
     // 使用useProjects 获取项目列表
-    const {isLoading, error, data: list} = useProjects(useDebounce(param, 200))
+    const {isLoading, error, data: list,retry} = useProjects(useDebounce(param, 200))
     // 获取用户
     const {data: users} = useUsers()
 
@@ -27,7 +27,7 @@ export const ProjectListScreen = () => {
             <SearchPanel users={users || []} param={param} setParam={setParam}/>
             {/*如果发生错误*/}
             {error ? <Typography.Text type={'danger'}>{error.message} </Typography.Text> : null}
-            <List loading={isLoading} users={users || []} dataSource={list || []}/>
+            <List refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}/>
         </Container>
     )
 }

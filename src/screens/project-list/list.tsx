@@ -17,16 +17,15 @@ export interface Project {
 }
 
 export interface listProps extends TableProps<Project> {
-    users: User[]
+    users: User[],
+    refresh?:() =>void,
 
 }
 
 export const List = ({users, ...props}: listProps) => {
     const {mutate} = useEditProject()
-    // 先知道project.id先消化
-    const pinProject = (id: number) => (pin: boolean) => {
-        mutate({id, pin})
-    }
+    // 先让project.id先消化
+    const pinProject = (id: number) => (pin: boolean) => mutate({id,pin}).then(props.refresh)
 
     return (
         // rowKey 每一行的 unique key
