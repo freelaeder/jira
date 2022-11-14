@@ -1,6 +1,6 @@
 // 用户未登录的页面 入口文件
 
-import {useState} from "react";
+import React, {useState} from "react";
 import RegisterScreen from "./register";
 import LoginScreen from "./login";
 import {Button, Card, Divider, Typography} from "antd";
@@ -11,6 +11,7 @@ import logo from 'assets/logo.svg'
 import left from 'assets/left.svg'
 import right from 'assets/right.svg'
 import {useDocumentTitle} from "../utils";
+import {ErrorBox} from "../components/lib";
 // 导入 react-helmet
 export const UnanthenticatedApp = () => {
     // 定义在 login 和 register 之间切换的状态
@@ -34,7 +35,7 @@ export const UnanthenticatedApp = () => {
                     {IsRegister ? '请注册' : '请登录'}
                 </Title>
                 {/*错误信息*/}
-                {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
+                <ErrorBox error={error}/>
                 {/*显示的组件*/}
                 {
                     IsRegister ? <RegisterScreen onError={setError}/> : <LoginScreen onError={setError}/>

@@ -4,13 +4,16 @@ import styled from "@emotion/styled";
 import {ButtonNoPadding} from "./lib";
 import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
+import {useProjectModal} from "../screens/project-list/util";
 
 // 气泡卡片 鼠标移动项目 展示的卡片
 // https://ant.design/components/popover-cn/#header
-export const ProjectPopover = (props: { projectButton: JSX.Element }) => {
+export const ProjectPopover = () => {
     // 获取收藏项目列表
-    const {data: projects, isLoading} = useProjects()
+    const {data: projects} = useProjects()
     const pinnedProjects = projects?.filter(item => item.pin)
+    // 控制编辑项目
+    const {open} = useProjectModal()
 
     const content = (
         <ContentContainer>
@@ -26,9 +29,9 @@ export const ProjectPopover = (props: { projectButton: JSX.Element }) => {
             {/*    分割线*/}
             <Divider/>
             {/*    创建项目*/}
-            {/*<ButtonNoPadding onClick={() => props.setProjectModalOpen(true)} type={'link'}> 创建项目 </ButtonNoPadding>*/}
+            <ButtonNoPadding onClick={open} type={'link'}> 创建项目 </ButtonNoPadding>
             {/*使用组件组合*/}
-            {props.projectButton}
+            {/*{props.projectButton}*/}
         </ContentContainer>
     )
     return (

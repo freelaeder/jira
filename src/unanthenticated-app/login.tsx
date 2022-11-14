@@ -3,6 +3,7 @@ import {useAuth} from "../context/auth-context";
 import {Form, message, Typography} from "antd";
 import {LoginButon} from "./index";
 import {useAsync} from "../utils/use-async";
+import {ErrorBox} from "../components/lib";
 
 // 登录页面
 const LoginScreen = ({onError}: { onError: (error: Error) => void }) => {
@@ -13,7 +14,7 @@ const LoginScreen = ({onError}: { onError: (error: Error) => void }) => {
     const handleSubmit = async (values: { username: string, password: string }) => {
         try {
             await run(login(values))
-            message.success('登录成功', 1.5)
+            // message.success('登录成功', 1.5)
         } catch (e: any) {
             onError(e)
         }
@@ -21,7 +22,7 @@ const LoginScreen = ({onError}: { onError: (error: Error) => void }) => {
     return (
         <Form onFinish={handleSubmit}>
             {/*错误信息*/}
-            {error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null}
+            <ErrorBox error={error}/>
             <Form.Item name={'username'} rules={[{required: true, message: '请输入用户名'}]}>
                 <input placeholder={'请输入用户名'} type="text " id={'username'}/>
             </Form.Item>

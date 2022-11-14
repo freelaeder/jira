@@ -1,5 +1,5 @@
 import {User} from "./search-panel";
-import {Dropdown, Table, TableProps} from "antd";
+import {Dropdown, Menu, Table, TableProps} from "antd";
 import dayjs from "dayjs";
 // 宿主环境 浏览器
 import {Link} from 'react-router-dom'
@@ -9,6 +9,8 @@ import {ButtonNoPadding} from "../../components/lib";
 import {useAuth} from "../../context/auth-context";
 import {MenuProps} from "antd/es/menu";
 import React from "react";
+import {useProjectModal} from "./util";
+import project from "../project";
 
 export interface Project {
     id: number
@@ -22,16 +24,17 @@ export interface Project {
 
 export interface listProps extends TableProps<Project> {
     users: User[],
-    refresh?:() =>void,
-    setProjectModalOpen: (isOpen:boolean) => void
-
 }
 
 export const List = ({users, ...props}: listProps) => {
     const {mutate} = useEditProject()
+    const {startEdit} = useProjectModal()
     // 先让project.id先消化
-    const pinProject = (id: number) => (pin: boolean) => mutate({id,pin}).then(props.refresh)
+    const pinProject = (id: number) => (pin: boolean) => mutate({id, pin})
+    // 编辑项目
+    const editProject = (id: number) => () => startEdit(id)
 
+    const {open} = useProjectModal()
     // dropdown
     type MenuItem = Required<MenuProps>['items'][number];
 
@@ -52,12 +55,13 @@ export const List = ({users, ...props}: listProps) => {
 
     // 展示的label 项
     const items: MenuItem[] = [
-        getItem('编辑', '1',)
+        getItem('编辑', '1',),
+        getItem('删除', '2')
     ]
+
     // 定义点击item项触发的事件 登出操作
-    const onClick: MenuProps['onClick'] = ({key}) => {
-        // message.warn('即将退出',1);
-        props.setProjectModalOpen(true)
+    const onClick: MenuProps['onClick'] = ({item, key, keyPath, domEvent}) => {
+        key === '1' ? editProject(1) : open()
     };
     return (
         // rowKey 每一行的 unique key
@@ -75,7 +79,7 @@ export const List = ({users, ...props}: listProps) => {
                    {
                        title: '名称',
                        align: 'center',
-                       width:'30rem',
+                       width: '30rem',
                        sorter: (a, b) => a.name.localeCompare(b.name),
                        render(value, project) {
                            return <Link to={String(project.id)}>{project.name}</Link>
@@ -106,9 +110,14 @@ export const List = ({users, ...props}: listProps) => {
                        }
                    },
                    {
-                       render(value,project){
+                       render(value, project) {
                            return (
-                               <Dropdown menu={{items,onClick}}>
+                               <Dropdown overlay={
+                                   <Menu>
+                                       <Menu.Item onClick={editProject(project.id)} key={'edit'}> 编辑</Menu.Item>
+                                       <Menu.Item key={'delete'}>删除</Menu.Item>
+                                   </Menu>
+                               }>
                                    <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
                                </Dropdown>
                            )
