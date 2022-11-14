@@ -8,7 +8,8 @@ import {cleanObject} from "./index";
  */
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
     // searchParams.get 获取url参数
-    const [searchParams, setSearchParam] = useSearchParams()
+    const [searchParams] = useSearchParams()
+    const setSearchParams = useSetUrlSearchParam()
     return [
         /**
          * 把“创建”函数和依赖项数组作为参数传入 useMemo，
@@ -22,11 +23,17 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             [searchParams]),
         (params: Partial<{ [key in K]: unknown }>) => {
-            const o = cleanObject({...Object.fromEntries(searchParams), ...params}) as URLSearchParamsInit
-            return setSearchParam(o)
+            return setSearchParams(params)
         }
-        //    as const 返回最原始的对象
     ] as const
 }
 
 // const a = ['1', 2, {gender: '女'}] as const
+
+export const useSetUrlSearchParam = () => {
+    const [searchParams, setSearchParam] = useSearchParams()
+    return (params:{[key in string ]: unknown}) => {
+        const o = cleanObject({...Object.fromEntries(searchParams), ...params}) as URLSearchParamsInit
+        return setSearchParam(o)
+    }
+}

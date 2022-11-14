@@ -50,6 +50,7 @@ export const AuthenticatedApp = () => {
 }
 
 const PageHeader = () => {
+
     return <Header between={true}>
         {/*gap =true  === margin-right: 2rem */}
         <HeaderLeft gap={true}>

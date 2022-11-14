@@ -1,7 +1,6 @@
-import {useUrlQueryParam} from "../../utils/url";
+import {useSetUrlSearchParam, useUrlQueryParam} from "../../utils/url";
 import {useMemo} from "react";
 import {useProject} from "../../utils/project";
-import {useSearchParams} from "react-router-dom";
 
 
 //url 项目列表搜索的参数
@@ -17,6 +16,11 @@ export const useProjectsSearchParams = () => {
     ] as const
 }
 
+export const useProjectsQueryKey = () => {
+    const [params] = useProjectsSearchParams();
+    return ["projects", params];
+};
+
 //在url中展示项目编辑的状态
 export const useProjectModal = () => {
     // 从url读取的所有数据都是字符串
@@ -28,7 +32,7 @@ export const useProjectModal = () => {
     // 打开状态
     const open = () => setProjectCreate({projectCreate: true})
 
-    const [_, setUrlParams] = useSearchParams();
+    const  setUrlParams = useSetUrlSearchParam();
     const close = () => setUrlParams({ projectCreate: "", editingProjectId: "" });
     // 关闭状态
     // const close = () => {

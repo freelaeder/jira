@@ -1,5 +1,5 @@
 import {Button, Drawer, Form, Input, Spin} from "antd";
-import {useProjectModal} from "./util";
+import {useProjectModal, useProjectsQueryKey} from "./util";
 import UserSelect from "../../components/user-select";
 import {useAddProject, useEditProject} from "../../utils/project";
 import {useForm} from "antd/es/form/Form";
@@ -17,7 +17,7 @@ export const ProjectModal = () => {
 
 
     // 等创建完成等 关闭 窗口
-    const {mutateAsync, error, isLoading: mutateLoading} = useMutateProject()
+    const {mutateAsync, error, isLoading: mutateLoading} = useMutateProject(useProjectsQueryKey() )
     // 重置表单
     const [form] = useForm()
     useEffect(() => {

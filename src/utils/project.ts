@@ -1,6 +1,7 @@
 import {Project} from "../screens/project-list/list";
 import {useHttp} from "./http";
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {QueryKey, useMutation, useQuery} from "react-query";
+import {useAddConfig, useDeleteConfig, useEditConfig} from "./use-optimistic-options";
 
 // 获取项目列表
 export const useProjects = (param?: Partial<Project>) => {
@@ -8,7 +9,7 @@ export const useProjects = (param?: Partial<Project>) => {
     // 只要param 发送变化 就重新获取
     return useQuery<Project[]>(
         ['projects', param],
-        () => client('projects', {data: param})
+        () => client('projects', {data: param}),
     )
 }
 
@@ -29,22 +30,22 @@ export const useProjects = (param?: Partial<Project>) => {
 // }
 
 // 编辑收藏的状态 使用react-query
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
     const client = useHttp();
-    const queryClient = useQueryClient()
     // 当更新成功之后就重新刷新缓存 projects
     return useMutation(
         (params: Partial<Project>) => client(`projects/${params.id}`, {
             method: 'PATCH',
             data: params
-        }), {onSuccess: () => queryClient.invalidateQueries('projects')})
+        }),
+        useEditConfig(queryKey)
+    )
 
 }
 
 // 添加收藏的状态
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
     const client = useHttp()
-    const queryClient = useQueryClient()
     // id 编辑的信息
     return useMutation(
         (params: Partial<Project>) =>
@@ -52,7 +53,7 @@ export const useAddProject = () => {
                 data: params,
                 method: 'POST'
             }),
-        {onSuccess: () => queryClient.invalidateQueries('projects')}
+        useAddConfig(queryKey)
     )
 }
 
@@ -66,5 +67,14 @@ export const useProject = (id?: number) => {
             // 只有当id 有值的时候触发
             enabled: Boolean(id)
         }
+    )
+}
+
+// 删除项目
+export const useDeleteProject = (queryKey: QueryKey) => {
+    const client = useHttp()
+    return useMutation(
+        ({id}: { id: number }) => client(`projects/${id}`, {method: "DELETE"}),
+        useDeleteConfig(queryKey)
     )
 }
