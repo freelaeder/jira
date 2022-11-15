@@ -3,7 +3,7 @@
 import {ProjectListScreen} from "./screens/project-list";
 import {useAuth} from "./context/auth-context";
 import styled from "@emotion/styled";
-import { Row} from "./components/lib";
+import {Row} from "./components/lib";
 import {ReactComponent as SoftWareLogo} from 'assets/software-logo.svg'
 import {Button, Dropdown} from "antd";
 // menu
@@ -111,7 +111,10 @@ const Container = styled.div`
 `
 
 // 主体内容
-const Main = styled.main``
+const Main = styled.main`
+  display: flex;
+  overflow: hidden;
+`
 // grid-area 用来给grid 子元素起名字
 const Header = styled(Row)`
   padding: 3.2rem;
