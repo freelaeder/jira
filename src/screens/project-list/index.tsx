@@ -38,5 +38,6 @@ export const ProjectListScreen = () => {
 // 指定追踪那个一个文件
 // ProjectListScreen.whyDidYouRender = true
 const Container = styled.div`
+  width: 100%;
   padding: 3.2rem;
 `

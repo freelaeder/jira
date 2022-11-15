@@ -6,6 +6,7 @@ import taskIcon from '../../assets/task.svg'
 import bugIcon from '../../assets/bug.svg'
 import styled from "@emotion/styled";
 import {Card} from "antd";
+import {CreateTask} from "./create-task";
 // 获取taskType的列表根据id渲染对应的图片
 const TaskTypeIcon = ({id}: { id: number }) => {
     const {data: taskTypes} = useTaskTypes()
@@ -18,13 +19,14 @@ const TaskTypeIcon = ({id}: { id: number }) => {
 }
 
 
-// 看板每一列的组件
+// 看板每一列的组件  任务
 export const KanbanColumn = ({kanban}: { kanban: Kanban }) => {
     const {data: allTasks} = useTasks(useTasksSearchParams())
     const tasks = allTasks?.filter(task => task.kanbanId === kanban.id)
     return (
         <Container>
             <h3>{kanban.name}</h3>
+            {/*每一个task*/}
             <TaskContainer>
                 {
                     tasks?.map(task => (
@@ -37,13 +39,15 @@ export const KanbanColumn = ({kanban}: { kanban: Kanban }) => {
                         </Card>
                     ))
                 }
+                {/*创建新的任务*/}
+                <CreateTask kanbanId={kanban.id} />
             </TaskContainer>
         </Container>
     )
 
 }
 
-const Container = styled.div`
+export const Container = styled.div`
   min-width: 27rem;
   border-radius: 6px;
   background-color: rgb(244, 245, 247);
@@ -54,9 +58,10 @@ const Container = styled.div`
 `
 
 const TaskContainer = styled.div`
+  // 滚动
   overflow: scroll;
   flex: 1;
-
+  // 清除滚动条
   ::-webkit-scrollbar {
     display: none;
   }
