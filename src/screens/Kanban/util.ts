@@ -1,7 +1,9 @@
 import {useLocation} from "react-router";
 import {useProject} from "../../utils/project";
 import {useUrlQueryParam} from "../../utils/url";
-import {useMemo} from "react";
+import {useCallback, useMemo} from "react";
+import {useTask} from "../../utils/task";
+import {useDebounce} from "../../utils";
 
 // 获取url中的id projects/1/....
 export const useProjectIdInUrl = () => {
@@ -24,6 +26,8 @@ export const useTasksSearchParams = () => {
         'processorId',
         'tagId'
     ])
+    // 输入名字时
+    const debounceName = useDebounce(param.name,1000)
     const projectId = useProjectIdInUrl()
     return useMemo(
         () => ({
@@ -31,6 +35,7 @@ export const useTasksSearchParams = () => {
             typeId: Number(param.typeId) || undefined,
             processorId: Number(param.processorId) || undefined,
             tagId: Number(param.tagId) || undefined,
+            // name:debounceName
             name: param.name
         }), [projectId, param]
     )
@@ -39,3 +44,25 @@ export const useTasksSearchParams = () => {
 }
 // 任务请求的querykey
 export const useTasksQueryKey = () => ['tasks', useTasksSearchParams()]
+
+// 编辑taskModal
+export const useTasksModal = () => {
+    const [{editingTaskId}, setEditingTaskId] = useUrlQueryParam(['editingTaskId'])
+    // 获取当前编辑的task详情
+    const {data: editingTask, isLoading} = useTask(Number(editingTaskId))
+    // 开始编辑
+    const startEdit = useCallback((id: number) => {
+        setEditingTaskId({editingTaskId: id})
+    }, [setEditingTaskId])
+    // 关闭模态框
+    const close = useCallback(() => {
+        setEditingTaskId({editingTaskId: ''})
+    }, [setEditingTaskId])
+    return {
+        editingTaskId,
+        editingTask,
+        startEdit,
+        close,
+        isLoading
+    }
+}

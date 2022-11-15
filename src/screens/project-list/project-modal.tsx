@@ -39,7 +39,7 @@ export const ProjectModal = () => {
 
 
     // forceRender={true} 强制刷新
-    return <Drawer forceRender={true} onClose={closeModal} width={'100%'} visible={projectModalOpen}>
+    return <Drawer forceRender={true} onClose={closeModal} width={'100%'} open={projectModalOpen}>
         {
             isLoading ? <Spin size={'large'}/> :
                 <Container>
@@ -60,6 +60,7 @@ export const ProjectModal = () => {
                             <Button loading={mutateLoading} type={'primary'} htmlType={'submit'}>提交</Button>
                         </Form.Item>
                     </Form>
+
                 </Container>
 
         }

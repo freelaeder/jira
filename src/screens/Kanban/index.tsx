@@ -9,6 +9,7 @@ import {ScreenContainer} from "../../components/lib";
 import {useTasks} from "../../utils/task";
 import {Spin} from "antd";
 import {CreateKanban} from "./create-kanban";
+import {TaskModal} from "./task-modal";
 
 const KanBanScreen = () => {
     // 指定标题
@@ -37,6 +38,8 @@ const KanBanScreen = () => {
                     <CreateKanban/>
                 </ColumnsContainer>
             }
+        {/*    编辑task*/}
+            <TaskModal />
 
         </ScreenContainer>
     );
