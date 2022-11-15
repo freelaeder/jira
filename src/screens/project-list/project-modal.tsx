@@ -14,12 +14,17 @@ export const ProjectModal = () => {
     const title = editingProject ? '编辑项目' : '创建项目'
     // 是否在编辑 还是创建 返回hook
     const useMutateProject = editingProject ? useEditProject : useAddProject
-
-
     // 等创建完成等 关闭 窗口
     const {mutateAsync, error, isLoading: mutateLoading} = useMutateProject(useProjectsQueryKey() )
     // 重置表单
     const [form] = useForm()
+    // 关闭按钮
+    const closeModal = ( ) => {
+        // 重置表单
+        form.resetFields()
+        // 关闭弹框
+        close()
+    }
     useEffect(() => {
         form.setFieldsValue(editingProject)
     }, [editingProject, form])
@@ -34,7 +39,7 @@ export const ProjectModal = () => {
 
 
     // forceRender={true} 强制刷新
-    return <Drawer forceRender={true} onClose={close} width={'100%'} visible={projectModalOpen}>
+    return <Drawer forceRender={true} onClose={closeModal} width={'100%'} visible={projectModalOpen}>
         {
             isLoading ? <Spin size={'large'}/> :
                 <Container>
@@ -55,7 +60,6 @@ export const ProjectModal = () => {
                             <Button loading={mutateLoading} type={'primary'} htmlType={'submit'}>提交</Button>
                         </Form.Item>
                     </Form>
-                    <Button onClick={close}>close</Button>
                 </Container>
 
         }

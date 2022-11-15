@@ -45,7 +45,7 @@ export const useProjectModal = () => {
     }
 
     return {
-        projectModalOpen: projectCreate == 'true' || Boolean(editingProject),
+        projectModalOpen: projectCreate === 'true' || Boolean(editingProjectId),
         open,
         close,
         startEdit,

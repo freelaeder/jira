@@ -17,7 +17,7 @@ const ProjectScreen = () => {
                 {/* ./kanban 代表不破坏之前的路径追加 ，因为它是子路由 需要追加在之前的路由上 */}
                 {/*  如果直接写 /kanban 会直接在跟路由开始 */}
                 {/*  path= '/' 重定向  */}
-                <Route path={'/'} element={<Navigate to={'./kanban'}/>}/>
+                <Route path={'/'} element={<Navigate  replace={true} to={'./kanban'}/>}/>
 
             </Routes>
         </div>

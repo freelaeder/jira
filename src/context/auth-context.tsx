@@ -1,11 +1,12 @@
-import React, {ReactNode, useState} from "react";
+import React, {ReactNode} from "react";
 // 设置别名
 import * as auth from 'auth-provider'
-import {User} from "../screens/project-list/search-panel";
 import {http} from 'utils/http'
 import {useMount} from "../utils";
 import {useAsync} from "../utils/use-async";
 import {FullPageErrorFallback, FullPageLoading} from "../components/lib";
+import {useQueryClient} from "react-query";
+import {User} from "../types/user";
 // 初始化user
 // 解决 用户登录页面刷新  退出问题
 const bootstrapUser = async () => {
@@ -35,13 +36,18 @@ AuthContext.displayName = "AuthContext";
 export const AuthProvider = ({children}: { children: ReactNode }) => {
     // 用户信息
     const {data: user, error, isLoading, isIdle, isError, run, setData: setUser} = useAsync<User | null>()
+    const queryClient = useQueryClient()
     // 登录
     // point free
     const login = (form: auth.IAuthParam) => auth.login(form).then(setUser);
     // 注册
     const register = (form: auth.IAuthParam) => auth.register(form).then(setUser);
     // 退出
-    const logout = () => auth.logout().then(() => setUser(null));
+    const logout = () => auth.logout().then(() => {
+        setUser(null)
+        // 清除缓存
+        queryClient.clear()
+    });
     // 页码加载调用
     // 解决 用户登录页面刷新  退出问题
     useMount(() => {

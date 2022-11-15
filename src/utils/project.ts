@@ -1,7 +1,7 @@
-import {Project} from "../screens/project-list/list";
 import {useHttp} from "./http";
 import {QueryKey, useMutation, useQuery} from "react-query";
 import {useAddConfig, useDeleteConfig, useEditConfig} from "./use-optimistic-options";
+import {Project} from "../types/project";
 
 // 获取项目列表
 export const useProjects = (param?: Partial<Project>) => {

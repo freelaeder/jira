@@ -79,7 +79,7 @@ export const useDebounce = <V>(value: V, delay = 500) => {
 
 
 // 改变当前页面的title
-// keeponUnmount true 保留title
+// keeponUnmount true 保留title  false 不保留
 export const useDocumentTitle = (title: string, keeponUnmount = true) => {
     // 页面加载后 oldTitle === 旧 'react app'
     // 加载后 oldTitle ===  新 用户传递的title、

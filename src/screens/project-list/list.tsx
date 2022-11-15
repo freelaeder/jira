@@ -1,23 +1,13 @@
-import {User} from "./search-panel";
 import {Button, Dropdown, Menu, Modal, Table, TableProps} from "antd";
 import dayjs from "dayjs";
 // 宿主环境 浏览器
 import {Link} from 'react-router-dom'
 import {Pin} from "../../components/pin";
 import {useDeleteProject, useEditProject} from "../../utils/project";
-import {MenuProps} from "antd/es/menu";
 import React from "react";
 import {useProjectModal, useProjectsQueryKey} from "./util";
-
-export interface Project {
-    id: number
-    name: string
-    personId: number
-    // 是否收藏
-    pin: boolean
-    organization: string
-    created: number
-}
+import {Project} from "../../types/project";
+import {User} from "../../types/user";
 
 export interface listProps extends TableProps<Project> {
     users: User[],

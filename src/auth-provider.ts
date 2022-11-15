@@ -1,4 +1,4 @@
-import {User} from "./screens/project-list/search-panel";
+import {User} from "./types/user";
 // 导入 服务器地址
 const baseUrl = process.env.REACT_APP_API_URL
 

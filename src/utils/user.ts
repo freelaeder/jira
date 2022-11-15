@@ -1,8 +1,8 @@
-import {User} from "../screens/project-list/search-panel";
 import {cleanObject} from "./index";
 import {useHttp} from "./http";
 import {useAsync} from "./use-async";
 import {useEffect} from "react";
+import {User} from "../types/user";
 
 // 获取用户
 export const useUsers = (param?: Partial<User>) => {
