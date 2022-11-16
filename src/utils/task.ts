@@ -2,9 +2,7 @@
 import {useHttp} from "./http";
 import {QueryKey, useMutation, useQuery} from "react-query";
 import {Task} from "../types/task";
-import {Kanban} from "../types/kanban";
 import {useAddConfig, useDeleteConfig, useEditConfig} from "./use-optimistic-options";
-import {Project} from "../types/project";
 
 export const useTasks = (param?: Partial<Task>) => {
     const client = useHttp()

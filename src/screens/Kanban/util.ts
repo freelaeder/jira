@@ -3,7 +3,6 @@ import {useProject} from "../../utils/project";
 import {useUrlQueryParam} from "../../utils/url";
 import {useCallback, useMemo} from "react";
 import {useTask} from "../../utils/task";
-import {useDebounce} from "../../utils";
 
 // 获取url中的id projects/1/....
 export const useProjectIdInUrl = () => {
@@ -20,14 +19,14 @@ export const useKanbanSearchParams = () => ({projectId: useProjectIdInUrl()})
 export const useKanbansQueryKey = () => ['kanbans', useKanbanSearchParams()]
 
 export const useTasksSearchParams = () => {
-    const [param, setParam] = useUrlQueryParam([
+    const [param] = useUrlQueryParam([
         'name',
         'typeId',
         'processorId',
         'tagId'
     ])
     // 输入名字时
-    const debounceName = useDebounce(param.name,1000)
+    // const debounceName = useDebounce(param.name,1000)
     const projectId = useProjectIdInUrl()
     return useMemo(
         () => ({
@@ -35,7 +34,6 @@ export const useTasksSearchParams = () => {
             typeId: Number(param.typeId) || undefined,
             processorId: Number(param.processorId) || undefined,
             tagId: Number(param.tagId) || undefined,
-            // name:debounceName
             name: param.name
         }), [projectId, param]
     )

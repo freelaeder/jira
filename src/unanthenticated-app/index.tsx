@@ -3,7 +3,7 @@
 import React, {useState} from "react";
 import RegisterScreen from "./register";
 import LoginScreen from "./login";
-import {Button, Card, Divider, Typography} from "antd";
+import {Button, Card, Divider} from "antd";
 // 引入 emotion
 import styled from "@emotion/styled";
 // 引入图片
