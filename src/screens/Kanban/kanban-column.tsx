@@ -11,6 +11,7 @@ import {Task} from "../../types/task";
 import {Mark} from "../../components/mark";
 import {useDeleteKanban} from "../../utils/kanban";
 import {Row} from "../../components/lib";
+import {MenuProps} from "antd/es/menu";
 // 获取taskType的列表根据id渲染对应的图片
 const TaskTypeIcon = ({id}: { id: number }) => {
     const {data: taskTypes} = useTaskTypes()
@@ -53,15 +54,25 @@ const More = ({kanban}: { kanban: Kanban }) => {
             }
         })
     }
-    const overlay = (
-        <Menu>
-            <Menu.Item>
-                <Button type={'link'} onClick={startEdit}>删除</Button>
-            </Menu.Item>
-        </Menu>
-    )
+    // 当版本< 4.24.0 可用
+    // const overlay = (
+    //     <Menu>
+    //         <Menu.Item key={'1'}>
+    //             <Button type={'link'} onClick={startEdit}>删除</Button>
+    //         </Menu.Item>
+    //     </Menu>
+    // )
+    // https://ant.design/components/dropdown-cn/
+    // 定义menu 最新版本需要使用menu // >=4.24.0 可用，推荐的写法
+    const items = [
+        {label: '删除', key: 'item-1'}, // 菜单项务必填写 key
+    ];
+    // 定义点击item项触发的事件 删除操作
+    const onClick: MenuProps['onClick'] = ({key}) => {
+        startEdit()
+    };
     return (
-        <Dropdown overlay={overlay}>
+        <Dropdown menu={{items, onClick}}>
             <Button type={'link'}>...</Button>
         </Dropdown>
     )
