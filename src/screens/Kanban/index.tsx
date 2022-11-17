@@ -32,11 +32,11 @@ const KanBanScreen = () => {
     // 拖拽之后的行为
     const onDragEnd = useDragEnd()
     return (
-        <div style={{overflow: "auto"}}>
-            {/*// onDragEnd 结束的时候 持久化*/}
+        // <div style={{overflow: "auto", display: 'flex'}}>
+            // onDragEnd 结束的时候 持久化
             <DragDropContext onDragEnd={onDragEnd()}>
                 <ScreenContainer>
-                    <h1>{currentProject?.name}</h1>
+                    <h1>{currentProject?.name}看板</h1>
                     {/*搜索框*/}
                     <SearchPanel/>
                     {/*  判断是不是loading*/}
@@ -65,7 +65,7 @@ const KanBanScreen = () => {
                     <TaskModal/>
                 </ScreenContainer>
             </DragDropContext>
-        </div>
+        // {/*</div>*/}
 
     );
 };

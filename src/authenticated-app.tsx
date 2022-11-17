@@ -18,6 +18,7 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {resetRoute} from "./utils";
 import {ProjectModal} from "./screens/project-list/project-modal";
 import {ProjectPopover} from "./components/project-popover";
+import {UserPopover} from "./components/use-popover";
 
 export const AuthenticatedApp = () => {
     // 定义编辑项目的开关
@@ -57,8 +58,10 @@ const PageHeader = () => {
             <Button style={{paddingRight: 0}} type={'link'} onClick={resetRoute}>
                 <SoftWareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
             </Button>
+            {/*收藏的项目*/}
             <ProjectPopover/>
-            <span>用户</span>
+            {/*用户*/}
+            <UserPopover/>
         </HeaderLeft>
         <HeaderRight>
             <User/>
