@@ -2,7 +2,12 @@
 import {useHttp} from "./http";
 import {QueryKey, useMutation, useQuery} from "react-query";
 import {Task} from "../types/task";
-import {useAddConfig, useDeleteConfig, useEditConfig, useReorderConfig} from "./use-optimistic-options";
+import {
+    useAddConfig,
+    useDeleteConfig,
+    useEditConfig,
+    useReorderTaskConfig
+} from "./use-optimistic-options";
 import {SortProps} from "./kanban";
 
 export const useTasks = (param?: Partial<Task>) => {
@@ -75,7 +80,7 @@ export const useReorderTask = (querKey:QueryKey) => {
                 method: 'POST'
             })
         },
-        useReorderConfig(querKey)
+        useReorderTaskConfig(querKey)
     )
 
 }

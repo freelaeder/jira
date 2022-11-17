@@ -107,7 +107,7 @@ export const useDragEnd = () => {
             // source 提起来的组件, destination 目标位置, type 类型
             const fromKanbanId = +source.droppableId
             const toKanbanId = +destination.droppableId
-            // 如果拖拽没有发生改变
+            // 如果发生拖拽 但是位置没有改变
             if (fromKanbanId === toKanbanId) {
                 message.info({content: '好像什么都没有发生哦'}).then()
                 return;

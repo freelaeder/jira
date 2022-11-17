@@ -1,4 +1,6 @@
 import {QueryKey, useQueryClient} from "react-query"
+import {reorder} from "./reorder";
+import {Task} from "../types/task";
 
 // 生成乐观更新
 const useConfig = (queryKey: QueryKey, callback: (target: any, old?: any[]) => any[]) => {
@@ -34,5 +36,17 @@ export const useAddConfig = (queryKey: QueryKey) => useConfig(queryKey,
 
 export default useConfig
 
-//拖拽
-export const useReorderConfig = (queryKey: QueryKey) => useConfig(queryKey, (target, old) => old || [])
+//拖拽 乐观更新
+
+export const useReorderKanbanConfig = (queryKey: QueryKey) =>
+    useConfig(queryKey, (target, old) => reorder({list: old, ...target}));
+
+export const useReorderTaskConfig = (queryKey: QueryKey) =>
+    useConfig(queryKey, (target, old) => {
+        const orderedList = reorder({list: old, ...target}) as Task[];
+        return orderedList.map((item) =>
+            item.id === target.fromId
+                ? {...item, kanbanId: target.toKanbanId}
+                : item
+        );
+    });

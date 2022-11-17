@@ -8,6 +8,7 @@ import React from "react";
 import {useProjectModal, useProjectsQueryKey} from "./util";
 import {Project} from "../../types/project";
 import {User} from "../../types/user";
+import {MenuProps} from "antd/es/menu";
 
 export interface listProps extends TableProps<Project> {
     users: User[],
@@ -65,7 +66,7 @@ export const List = ({users, ...props}: listProps) => {
                    },
                    {
                        render(value, project) {
-                           return <More project={project} />
+                           return <More project={project}/>
 
                        }
 
@@ -79,37 +80,47 @@ export const List = ({users, ...props}: listProps) => {
 
 }
 
-const More = ({ project }: { project: Project }) => {
-    const { startEdit } = useProjectModal();
+const More = ({project}: { project: Project }) => {
+    const {startEdit} = useProjectModal();
     // 编辑项目
     const editProject = (id: number) => () => startEdit(id);
-    const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
-   // 删除项目
+    const {mutate: deleteProject} = useDeleteProject(useProjectsQueryKey());
+    // 删除项目
     const confirmDeleteProject = (id: number) => {
         Modal.confirm({
             title: "确定删除这个项目吗?",
             content: "点击确定删除",
             okText: "确定",
             onOk() {
-                deleteProject({ id });
+                deleteProject({id});
             },
         });
     };
+    // 定义menu 最新版本需要使用menu // >=4.24.0 可用，推荐的写法
+    const items = [
+        {label: '编辑', key: 'edit'}, // 菜单项务必填写 key
+        {label: '删除', key: 'delete'}, // 菜单项务必填写 key
+    ];
+    // 定义点击item项触发的事件 删除操作
+    const onClick: MenuProps['onClick'] = ({key}) => {
+        key === 'edit' ? startEdit(project.id) : confirmDeleteProject(project.id)
+    };
     return (
         <Dropdown
-            overlay={
-                <Menu>
-                    <Menu.Item onClick={editProject(project.id)} key={"edit"}>
-                        编辑
-                    </Menu.Item>
-                    <Menu.Item
-                        onClick={() => confirmDeleteProject(project.id)}
-                        key={"delete"}
-                    >
-                        删除
-                    </Menu.Item>
-                </Menu>
-            }
+            menu={{items, onClick}}
+            // overlay={
+            //     <Menu>
+            //         <Menu.Item onClick={editProject(project.id)} key={"edit"}>
+            //             编辑
+            //         </Menu.Item>
+            //         <Menu.Item
+            //             onClick={() => confirmDeleteProject(project.id)}
+            //             key={"delete"}
+            //         >
+            //             删除
+            //         </Menu.Item>
+            //     </Menu>
+            // }
         >
             <Button type={"link"}>...</Button>
         </Dropdown>
