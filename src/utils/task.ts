@@ -2,7 +2,8 @@
 import {useHttp} from "./http";
 import {QueryKey, useMutation, useQuery} from "react-query";
 import {Task} from "../types/task";
-import {useAddConfig, useDeleteConfig, useEditConfig} from "./use-optimistic-options";
+import {useAddConfig, useDeleteConfig, useEditConfig, useReorderConfig} from "./use-optimistic-options";
+import {SortProps} from "./kanban";
 
 export const useTasks = (param?: Partial<Task>) => {
     const client = useHttp()
@@ -61,4 +62,20 @@ export const useDeleteTask = (queryKey: QueryKey) => {
         ({id}: { id: number }) => client(`tasks/${id}`, {method: "DELETE"}),
         useDeleteConfig(queryKey)
     )
+}
+
+
+// 拖拽持久化 拖拽task
+export const useReorderTask = (querKey:QueryKey) => {
+    const client = useHttp()
+    return useMutation(
+        (params: SortProps) => {
+            return client('tasks/reorder', {
+                data: params,
+                method: 'POST'
+            })
+        },
+        useReorderConfig(querKey)
+    )
+
 }

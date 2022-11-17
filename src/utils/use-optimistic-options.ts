@@ -1,4 +1,4 @@
-import { QueryKey, useQueryClient } from "react-query"
+import {QueryKey, useQueryClient} from "react-query"
 
 // 生成乐观更新
 const useConfig = (queryKey: QueryKey, callback: (target: any, old?: any[]) => any[]) => {
@@ -11,7 +11,7 @@ const useConfig = (queryKey: QueryKey, callback: (target: any, old?: any[]) => a
             queryClient.setQueryData(queryKey, (old?: any[]) => {
                 return callback(target, old)
             });
-            return { previousItems };
+            return {previousItems};
         },
         onError: (error: Error, newItem: any, context: any) => {
             // 修改失败，回滚数据
@@ -21,7 +21,7 @@ const useConfig = (queryKey: QueryKey, callback: (target: any, old?: any[]) => a
 }
 
 export const useEditConfig = (queryKey: QueryKey) => useConfig(queryKey,
-    (target, old) => old?.map((item) => item.id === target.id ? { ...item, ...target } : item ) || []
+    (target, old) => old?.map((item) => item.id === target.id ? {...item, ...target} : item) || []
 )
 
 export const useDeleteConfig = (queryKey: QueryKey) => useConfig(queryKey,
@@ -33,3 +33,6 @@ export const useAddConfig = (queryKey: QueryKey) => useConfig(queryKey,
 )
 
 export default useConfig
+
+//拖拽
+export const useReorderConfig = (queryKey: QueryKey) => useConfig(queryKey, (target, old) => old || [])

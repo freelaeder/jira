@@ -13,6 +13,7 @@ import {useDeleteKanban} from "../../utils/kanban";
 import {Row} from "../../components/lib";
 import {MenuProps} from "antd/es/menu";
 import React from "react";
+import {Drag, Drop, DropChild} from "../../components/drag-and-drop";
 // 获取taskType的列表根据id渲染对应的图片
 const TaskTypeIcon = ({id}: { id: number }) => {
     const {data: taskTypes} = useTaskTypes()
@@ -94,11 +95,23 @@ export const KanbanColumn = React.forwardRef<HTMLDivElement, { kanban: Kanban }>
             </Row>
             {/*每一个task*/}
             <TaskContainer>
-                {
-                    tasks?.map(task => (
-                        <TaskCard key={task.id} task={task}/>
-                    ))
-                }
+                {/*可拖拽的地方*/}
+                <Drop  type={'ROW'} direction={'vertical'} droppableId={String(kanban.id)}>
+                    <DropChild style={{minHeight: '1rem'}}>
+                        {
+                            tasks?.map((task, index) => (
+                                //可拖拽的每一项
+                                <Drag key={task.id} draggableId={'task' + task.id} index={index}>
+                                    {/*系统自带的元素可以接受ref*/}
+                                    <div>
+                                        <TaskCard key={task.id} task={task}/>
+                                    </div>
+                                </Drag>
+                            ))
+                        }
+                    </DropChild>
+
+                </Drop>
                 {/*创建新的任务*/}
                 <CreateTask kanbanId={kanban.id}/>
             </TaskContainer>
