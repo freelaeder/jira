@@ -8,6 +8,9 @@ import {DevTools, loadServer} from "jira-dev-tool";
 import {AppProviders} from "./context";
 // 引入 antd
 import 'antd/dist/antd.less'
+import {ConfigProvider} from "antd";
+
+
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -16,10 +19,11 @@ loadServer(() =>
     root.render(
         <React.StrictMode>
             <AppProviders>
-                <DevTools/>
-                <App/>
+                <ConfigProvider prefixCls={'antd'}>
+                    <App/>
+                </ConfigProvider>
             </AppProviders>
-        </React.StrictMode>
+         </React.StrictMode>
     )
 )
 

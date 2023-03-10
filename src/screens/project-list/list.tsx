@@ -1,4 +1,4 @@
-import {Button, Dropdown, Menu, Modal, Table, TableProps} from "antd";
+import {Button, Dropdown,  Modal, Table, TableProps} from "antd";
 import dayjs from "dayjs";
 // 宿主环境 浏览器
 import {Link} from 'react-router-dom'
@@ -83,7 +83,7 @@ export const List = ({users, ...props}: listProps) => {
 const More = ({project}: { project: Project }) => {
     const {startEdit} = useProjectModal();
     // 编辑项目
-    const editProject = (id: number) => () => startEdit(id);
+    // const editProject = (id: number) => () => startEdit(id);
     const {mutate: deleteProject} = useDeleteProject(useProjectsQueryKey());
     // 删除项目
     const confirmDeleteProject = (id: number) => {

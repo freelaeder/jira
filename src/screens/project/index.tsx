@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Navigate, Route, Routes, useLocation} from "react-router";
 import KanBanScreen from "../Kanban";
 import EpicScreen from "../epic";
@@ -31,12 +31,6 @@ const ProjectScreen = () => {
         <Container>
             <Aside>
                 <Menu mode={'inline'} selectedKeys={[routeType]} items={items} onClick={onClick}>
-                    {/*<Menu.Item key={'kanban'}>*/}
-                    {/*    <Link to={'kanban'}>看板</Link>*/}
-                    {/*</Menu.Item>*/}
-                    {/*<Menu.Item key={'epic'}>*/}
-                    {/*    <Link to={'epic'}>任务组</Link>*/}
-                    {/*</Menu.Item>*/}
                 </Menu>
 
             </Aside>

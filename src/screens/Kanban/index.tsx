@@ -24,6 +24,7 @@ const KanBanScreen = () => {
     useDocumentTitle('看板列表', false)
     // 获取kanban数据
     const {data: currentProject} = useProjectInUrl()
+    console.log(currentProject,'currentProject')
     const {data: kanbans = [], isLoading: kanbanIsLoading} = useKanbans(useKanbanSearchParams())
     // 任务loading
     const {isLoading: taskIsLoading} = useTasks(useTasksSearchParams())

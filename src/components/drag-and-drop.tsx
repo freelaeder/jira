@@ -20,6 +20,7 @@ export const Drop = ({children, ...props}: DropProps) => {
                 provided => {
                     if (React.isValidElement(children)) {
                         //克隆传递的子元素 添加 props
+
                         return React.cloneElement(children, {
                             ...provided.droppableProps,
                             // @ts-ignore

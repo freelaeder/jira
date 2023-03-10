@@ -19,6 +19,9 @@ import {resetRoute} from "./utils";
 import {ProjectModal} from "./screens/project-list/project-modal";
 import {ProjectPopover} from "./components/project-popover";
 import {UserPopover} from "./components/use-popover";
+import CalendarPopover from "./screens/calendar/calendar-popover";
+import CalendarScreen from "./screens/calendar";
+import {useTheme} from "./context/theme-context";
 
 export const AuthenticatedApp = () => {
     // 定义编辑项目的开关
@@ -31,17 +34,16 @@ export const AuthenticatedApp = () => {
                 />
                 {/*// 主体内容*/}
                 <Main>
-
                     <Routes>
                         {/*项目列表*/}
                         <Route path={'/projects'} element={<ProjectListScreen/>}></Route>
                         {/*详细项目页*/}
                         <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}></Route>
+                        {/*日历页*/}
+                        <Route path={'/calendar'} element={<CalendarScreen />} ></Route>
                         {/*    设置路由重定向*/}
                         <Route path={'/'} element={<Navigate to={'/projects'}/>}></Route>
-
                     </Routes>
-
                 </Main>
                 <ProjectModal/>
             </Router>
@@ -55,6 +57,7 @@ const PageHeader = () => {
     return <Header between={true}>
         {/*gap =true  === margin-right: 2rem */}
         <HeaderLeft gap={true}>
+
             <Button style={{paddingRight: 0}} type={'link'} onClick={resetRoute}>
                 <SoftWareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
             </Button>
@@ -62,6 +65,8 @@ const PageHeader = () => {
             <ProjectPopover/>
             {/*用户*/}
             <UserPopover/>
+            {/*    日历组件*/}
+            <CalendarPopover/>
         </HeaderLeft>
         <HeaderRight>
             <User/>
@@ -98,8 +103,9 @@ const User = () => {
         // message.warn('即将退出',1);
         logout()
     };
+    const {changeTheme} = useTheme()
     return <>
-        <SmileTwoTone spin={true} style={{fontSize: '16px', color: '#08c'}}/>
+        <SmileTwoTone onClick={ changeTheme} spin={true} style={{fontSize: '16px', color: '#08c'}}/>
         <Dropdown menu={{items, onClick}}
         >
             <Button onClick={e => e.preventDefault()} type={'link'}> Hi, {user?.name} </Button>

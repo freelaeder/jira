@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {Button, Spin, Typography} from "antd";
+import {Button,  Spin, Typography} from "antd";
 import {DevTools} from "jira-dev-tool";
 import React from "react";
 

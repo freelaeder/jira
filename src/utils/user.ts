@@ -1,7 +1,4 @@
-import {cleanObject} from "./index";
 import {useHttp} from "./http";
-import {useAsync} from "./use-async";
-import {useEffect} from "react";
 import {User} from "../types/user";
 import {useQuery} from "react-query";
 
