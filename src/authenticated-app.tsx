@@ -22,6 +22,7 @@ import {UserPopover} from "./components/use-popover";
 import CalendarPopover from "./screens/calendar/calendar-popover";
 import CalendarScreen from "./screens/calendar";
 import {useTheme} from "./context/theme-context";
+import PersonalDisplay from "./screens/personal-display";
 
 export const AuthenticatedApp = () => {
     // 定义编辑项目的开关
@@ -41,6 +42,8 @@ export const AuthenticatedApp = () => {
                         <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}></Route>
                         {/*日历页*/}
                         <Route path={'/calendar'} element={<CalendarScreen />} ></Route>
+                        {/*个人展示页*/}
+                        <Route path={'/personal/:personName/*'} element={<PersonalDisplay />} ></Route>
                         {/*    设置路由重定向*/}
                         <Route path={'/'} element={<Navigate to={'/projects'}/>}></Route>
                     </Routes>

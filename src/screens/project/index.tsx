@@ -8,7 +8,7 @@ import {Menu} from "antd";
 import {MenuProps} from "antd/es/menu";
 
 // 获取当前路径的最后一个参数
-const useRouteType = () => {
+export const useRouteType = () => {
     const units = useLocation().pathname.split('/')
     return units[units.length - 1]
 }
@@ -32,7 +32,6 @@ const ProjectScreen = () => {
             <Aside>
                 <Menu mode={'inline'} selectedKeys={[routeType]} items={items} onClick={onClick}>
                 </Menu>
-
             </Aside>
             <Main>
                 <Routes>
